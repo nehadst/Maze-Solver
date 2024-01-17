@@ -11,13 +11,13 @@ public class Main {
     private static final Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) {
-        System.out.println("** Starting Maze Runner");
+        logger.info("** Starting Maze Runner");
         options.addOption("i", true, "inputfile");
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
         String file  = cmd.getoptionvalue(i);
         try {
-            System.out.println("**** Reading the maze from file " + file);
+            logger.info("**** Reading the maze from file " + file);
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine()) != null) {
