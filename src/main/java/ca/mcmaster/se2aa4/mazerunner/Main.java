@@ -16,7 +16,7 @@ public class Main {
         options.addOption("i", true, "inputfile");
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
-        String file  = cmd.getoptionvalue(i);
+        String file  = cmd.getoptionvalue("i");
         try {
             logger.info("**** Reading the maze from file " + file);
             BufferedReader reader = new BufferedReader(new FileReader(file));
