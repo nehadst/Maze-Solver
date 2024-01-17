@@ -19,7 +19,7 @@ public class Main {
         Options options = new Options();
         options.addOption("i", true, "inputfile");
         CommandLineParser parser = new DefaultParser();
-        CommandLine cmd;
+        CommandLine cmd = null;
         try {
             cmd = parser.parse(options, args);
         }
