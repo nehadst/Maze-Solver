@@ -12,6 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         logger.info("** Starting Maze Runner");
+        Options options = new Options();
         options.addOption("i", true, "inputfile");
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
