@@ -9,6 +9,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ca.mcmaster.se2aa4.mazerunner.Configuration;
+import ca.mcmaster.se2aa4.mazerunner.Maze;
 
 public class Main {
 
@@ -27,14 +29,44 @@ public class Main {
         path_is_valid = path.verifypath();
         path_output(path_is_valid);
         */
-        Configuration config = Configuration.readMaze(args);
-        System.out.println("1");
+        Options options = new Options();
+        options.addOption("i", true, "inputfile");
+        options.addOption("p", true, "path to verify");
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd;
+        try {
+            cmd = parser.parse(options, args);
+        } catch (ParseException e) {
+            logger.error("Parsing error " + e.getMessage());
+            return;
+        }
+
+        String filePath = cmd.getOptionValue("i");
+        String pathToVerify = cmd.getOptionValue("p");
+        if (filePath == null) {
+            logger.error("Input file not specified.");
+            return;
+        }
+
+        Configuration config = Configuration.readMaze(new String[]{"-i", filePath});
+        if (config == null) {
+            logger.error("Could not read the maze configuration.");
+            return;
+        }
+
         Maze maze = new Maze(config.getMazeConfig());
-        System.out.println("2");
-        System.out.println(maze.explrmaze());
-        logger.info("** Starting Maze Runner");
-        System.out.println("**** Computing path");
-        System.out.println("PATH NOT COMPUTED");
-        System.out.println("** End of MazeRunner");
+        if (pathToVerify != null) {
+            logger.info("Verifying provided path: " + pathToVerify);
+            boolean isValid = maze.verifyPath(pathToVerify);
+            System.out.println("Provided path is " + (isValid ? "valid" : "invalid"));
+        } else {
+            System.out.println("Exploring Maze");
+            String exploredPath = maze.explrmaze();
+            System.out.println("Canonical Maze Path: " + exploredPath);
+            System.out.println("Maze Explored");
+        }
+
+        logger.info("** End of MazeRunner");
     }
 }
