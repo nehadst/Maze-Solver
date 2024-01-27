@@ -22,10 +22,10 @@ public class Main {
         String solution = explrmaze(Maze);
         String path = input_path;
         maze = readConfiguration(args[i + 1]);
-        factored_path = solution.turntofactorized();
-        logger.info("Path to exit: " + solution);
-        path_is_valid = path.verifypath();
-        path_output(path_is_valid);
+        return factoredPath.toString();
+        System.out.println("Canonical Maze Path: " + exploredPath);
+        boolean isValid = maze.verifyPath(pathToVerify);
+        System.out.println("Provided path is " + (isValid ? "valid" : "invalid"));
         */
         Options options = new Options();
         options.addOption("i", true, "inputfile");
@@ -60,11 +60,9 @@ public class Main {
             boolean isValid = maze.verifyPath(pathToVerify);
             System.out.println("Provided path is " + (isValid ? "valid" : "invalid"));
         } else {
-            System.out.println("Exploring Maze");
             String exploredPath = maze.explrmaze();
             System.out.println("Canonical Maze Path: " + exploredPath);
             System.out.println("Factorized Maze Path: " + maze.factorizePath(exploredPath));
-            System.out.println("Maze Explored");
         }
 
         logger.info("** End of MazeRunner");
