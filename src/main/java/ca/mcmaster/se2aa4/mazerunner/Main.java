@@ -9,8 +9,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ca.mcmaster.se2aa4.mazerunner.Configuration;
-import ca.mcmaster.se2aa4.mazerunner.Maze;
 
 public class Main {
 
@@ -54,8 +52,9 @@ public class Main {
             logger.error("Could not read the maze configuration.");
             return;
         }
-
         Maze maze = new Maze(config.getMazeConfig());
+        maze.setMazeExplorer(new RightHandAlg(maze.getMazeConfig()));
+
         if (pathToVerify != null) {
             logger.info("Verifying provided path: " + pathToVerify);
             boolean isValid = maze.verifyPath(pathToVerify);
@@ -64,6 +63,7 @@ public class Main {
             System.out.println("Exploring Maze");
             String exploredPath = maze.explrmaze();
             System.out.println("Canonical Maze Path: " + exploredPath);
+            System.out.println("Factorized Maze Path: " + maze.factorizePath(exploredPath));
             System.out.println("Maze Explored");
         }
 

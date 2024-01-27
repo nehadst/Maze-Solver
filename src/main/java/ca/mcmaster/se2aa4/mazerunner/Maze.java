@@ -7,6 +7,7 @@ public class Maze {
     private char[][] maze;
     private int x, y;
     private Direction dir;
+    private MazeExplorer maze_explorer;
 
     private enum Direction {
         UP, RIGHT, DOWN, LEFT
@@ -24,88 +25,31 @@ public class Maze {
         this.dir = Direction.RIGHT;
     }
     
+    public char[][] getMazeConfig() {
+        return this.maze;
+    }
+
+    public void setMazeExplorer(MazeExplorer maze_explorer) {
+        this.maze_explorer = maze_explorer;
+    }
+
     public String explrmaze() {
-        StringBuilder path = new StringBuilder();
-        int forwardCount = 0;
-    
-        while (y < maze[0].length - 1) {
-            if (canMove(turnRight(dir))) {
-                if (forwardCount > 0) {
-                    path.append(forwardCount).append('F');
-                    forwardCount = 0;
-                }
-                turnRight();
-                path.append('R');
-                if (canMove(dir)) { 
-                    moveForward();
-                    forwardCount = 1;
-                }
-            } else if (canMove(dir)) {
-                forwardCount++;
-                moveForward();
-            } else {
-
-                if (forwardCount > 0) {
-                    path.append(forwardCount).append('F');
-                    forwardCount = 0;
-                }
-                turnLeft();
-                path.append('L');
-                while (!canMove(dir)) {
-                    turnLeft();
-                    path.append('L');
-                }
-                moveForward();
-                forwardCount = 1;
-            }
-        }
-        if (forwardCount > 0) {
-            path.append(forwardCount).append('F');
-        }
-    
-        return path.toString();
-    }
-    
-    private boolean canMove() {
-        return canMove(this.dir);
+        return maze_explorer.explrmaze(this);
     }
 
-    private boolean canMove(Direction direction) {
-        switch (direction) {
-            case UP: return x > 0 && maze[x - 1][y] == PATH;
-            case RIGHT: return y < maze[0].length - 1 && maze[x][y + 1] == PATH;
-            case DOWN: return x < maze.length - 1 && maze[x + 1][y] == PATH;
-            case LEFT: return y > 0 && maze[x][y - 1] == PATH;
-            default: return false;
-        }
+    public int getLength(){
+        return maze.length;
     }
 
-    private void moveForward() {
-        switch (dir) {
-            case UP: x--; break;
-            case RIGHT: y++; break;
-            case DOWN: x++; break;
-            case LEFT: y--; break;
-        }
+    public char getCell(int r, int c){
+        return maze[r][c];
     }
 
-    private void turnRight() {
-        dir = Direction.values()[(dir.ordinal() + 1) % 4];
+    public int getWidth(){
+        return maze[0].length;
     }
 
-    private void turnLeft() {
-        dir = Direction.values()[(dir.ordinal() + 3) % 4];
-    }
-
-    private Direction turnRight(Direction direction) {
-        return Direction.values()[(direction.ordinal() + 1) % 4];
-    }
-
-    private Direction turnLeft(Direction direction) {
-        return Direction.values()[(direction.ordinal() + 3) % 4];
-    }
-
-    private String factorizePath(String path) {
+    public String factorizePath(String path) {
         StringBuilder factoredPath = new StringBuilder();
         char lastChar = path.charAt(0);
         int count = 1;
@@ -127,6 +71,22 @@ public class Maze {
         }
         factoredPath.append(lastChar);
         return factoredPath.toString();
+    }
+
+    private void turnRight() {
+        dir = Direction.values()[(dir.ordinal() + 1) % 4];
+    }
+
+    private void turnLeft() {
+        dir = Direction.values()[(dir.ordinal() + 3) % 4];
+    }
+
+    private Direction turnRight(Direction direction) {
+        return Direction.values()[(direction.ordinal() + 1) % 4];
+    }
+
+    private Direction turnLeft(Direction direction) {
+        return Direction.values()[(direction.ordinal() + 3) % 4];
     }
         public boolean verifyPath(String pathString) {
             int localX = x;
